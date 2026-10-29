@@ -2,9 +2,9 @@
 
 **We test it. Then we report it.**
 
-Đây là kho lưu toàn bộ nội dung The Lab Report đã test thật, đi kèm các video review trên kênh. Mỗi mục đã test có một thư mục riêng gồm: ghi chú test, file mẫu đầu vào, output gốc và kịch bản video — để bất kỳ ai cũng kiểm chứng lại được.
+Đây là kho lưu toàn bộ nội dung The Lab Report đã test thật, đi kèm các video review trên kênh. Mỗi mục đã test có một thư mục riêng gồm file mẫu đầu vào và output gốc — để bất kỳ ai cũng kiểm chứng lại được.
 
-This repository archives everything actually tested by The Lab Report, companion to the channel's review videos. One folder per tested item: test notes, sample inputs, raw outputs, and the video script — so anyone can verify.
+This repository archives everything actually tested by The Lab Report, companion to the channel's review videos. One folder per tested item: sample inputs and raw outputs — so anyone can verify.
 
 ## Đã test / Tested
 
