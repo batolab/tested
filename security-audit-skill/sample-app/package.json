@@ -1,0 +1,1 @@
+{"description":"Small sample Node.js API used as a security-audit test target","license":"MIT","main":"app.js","name":"sample-shop-api","scripts":{"start":"node app.js"},"version":"1.0.0"}

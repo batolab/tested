@@ -1,0 +1,244 @@
+[
+  {
+    "verdict": "needs_validation",
+    "fingerprint": "app-admin-missing-auth",
+    "title": "Missing authentication and authorization on admin users endpoint",
+    "description": "The administrative endpoint /admin/users serializes and returns all registered user objects including administrator details without authenticating the client or validating authorization credentials.",
+    "claimed_root_cause": "The /admin/users routing branch directly responds with JSON-serialized user records without inspecting request headers, session tokens, or authentication credentials.",
+    "trace": [
+      {
+        "kind": "entrypoint",
+        "file": "app.js",
+        "line": 57,
+        "scope": "handle",
+        "description": "HTTP request enters the pathname routing check for /admin/users."
+      },
+      {
+        "kind": "sink",
+        "file": "app.js",
+        "line": 59,
+        "scope": "handle",
+        "description": "Handler serializes the internal users array containing administrative records and terminates response with user data."
+      }
+    ],
+    "evidence": [
+      {
+        "file": "app.js",
+        "line": 59,
+        "description": "The response sends JSON.stringify(users) directly to the client without calling any authentication or authorization middleware or checking request headers."
+      }
+    ],
+    "blockers": [
+      "The required OS-enforced execution sandbox controls (network isolation, read-only target mounts, and resource bounds) cannot be enforced in the current environment to safely execute the target HTTP server.",
+      "Repository source does not document or include reverse proxy or API gateway configuration that might enforce upstream authentication before forwarding to this Node.js process."
+    ],
+    "validation_plan": {
+      "local": "In an OS-sandboxed environment with loopback-only networking, start the server and issue a GET request to /admin/users without credentials to confirm that user records are returned.",
+      "deployment": "Verify with infrastructure owners whether edge ingress or reverse proxy configuration terminates authentication and filters unauthenticated access before reaching the /admin/users route."
+    }
+  },
+  {
+    "verdict": "needs_validation",
+    "fingerprint": "app-calc-code-injection",
+    "title": "Unsanitized user expression passed to eval() in calculator endpoint",
+    "description": "The /calc endpoint accepts an untrusted expr query parameter and evaluates it directly using the JavaScript eval() runtime function without validation or sandboxing.",
+    "claimed_root_cause": "handle extracts query parameter q.expr and passes it directly to global eval(), permitting arbitrary JavaScript execution in the server process context.",
+    "trace": [
+      {
+        "kind": "entrypoint",
+        "file": "app.js",
+        "line": 50,
+        "scope": "handle",
+        "description": "Incoming HTTP request enters the pathname check for /calc."
+      },
+      {
+        "kind": "propagation",
+        "file": "app.js",
+        "line": 52,
+        "scope": "handle",
+        "description": "Untrusted query parameter q.expr is retrieved from parsed URL query parameters."
+      },
+      {
+        "kind": "sink",
+        "file": "app.js",
+        "line": 52,
+        "scope": "handle",
+        "description": "Expression string is passed directly into eval() sink."
+      }
+    ],
+    "evidence": [
+      {
+        "file": "app.js",
+        "line": 52,
+        "description": "eval(q.expr) executes arbitrary JavaScript code with server privileges."
+      }
+    ],
+    "blockers": [
+      "The required OS-enforced execution sandbox controls (empty allowlisted environment, read-only target and toolchain mounts, and low CPU/memory/process limits) cannot be enforced to safely execute target code evaluation."
+    ],
+    "validation_plan": {
+      "local": "Within a fully isolated OS sandbox, pass a non-destructive mathematical expression (such as 7*6) and verify eval() evaluates and returns 42."
+    }
+  },
+  {
+    "verdict": "needs_validation",
+    "fingerprint": "app-hello-reflected-xss",
+    "title": "Reflected cross-site scripting in /hello endpoint",
+    "description": "The /hello route echoes untrusted user input from the name query parameter directly into an HTML response body without encoding or sanitization under Content-Type text/html.",
+    "claimed_root_cause": "handle sets Content-Type to text/html and concatenates raw query parameter q.name into the HTML response markup.",
+    "trace": [
+      {
+        "kind": "entrypoint",
+        "file": "app.js",
+        "line": 43,
+        "scope": "handle",
+        "description": "Incoming HTTP request enters /hello route handler."
+      },
+      {
+        "kind": "propagation",
+        "file": "app.js",
+        "line": 45,
+        "scope": "handle",
+        "description": "Response headers are configured with Content-Type: text/html."
+      },
+      {
+        "kind": "sink",
+        "file": "app.js",
+        "line": 46,
+        "scope": "handle",
+        "description": "Unsanitized q.name parameter is interpolated into HTML heading string and written to response."
+      }
+    ],
+    "evidence": [
+      {
+        "file": "app.js",
+        "line": 46,
+        "description": "res.end('<h1>Hello ' + q.name + '</h1>') emits unescaped user input into HTML markup."
+      }
+    ],
+    "blockers": [
+      "The required OS-enforced execution sandbox controls (isolated loopback namespace, scratch write boundary, and resource limits) cannot be enforced in the current environment to run the target server.",
+      "Browser context execution controls and client-side rendering environment cannot be safely established to observe DOM execution."
+    ],
+    "validation_plan": {
+      "local": "Within an OS-sandboxed loopback environment, send a request with a benign HTML tag marker (e.g. <b>test</b>) in q.name and assert that the unescaped tag is returned verbatim in the text/html response body.",
+      "deployment": "Verify whether upstream reverse proxies or WAF layers enforce input sanitization or attach Content-Security-Policy headers that restrict script execution."
+    }
+  },
+  {
+    "verdict": "needs_validation",
+    "fingerprint": "app-product-sql-injection",
+    "title": "SQL injection via raw string concatenation in /product endpoint",
+    "description": "The /product endpoint constructs an SQL query by directly concatenating the untrusted id query parameter into an SQL string passed to db.query().",
+    "claimed_root_cause": "handle concatenates user input q.id directly into the SQL query string rather than using parameterized query placeholders.",
+    "trace": [
+      {
+        "kind": "entrypoint",
+        "file": "app.js",
+        "line": 28,
+        "scope": "handle",
+        "description": "Incoming HTTP request matches the /product pathname."
+      },
+      {
+        "kind": "propagation",
+        "file": "app.js",
+        "line": 30,
+        "scope": "handle",
+        "description": "Query parameter q.id is concatenated into the SQL statement string without validation or escaping."
+      },
+      {
+        "kind": "sink",
+        "file": "app.js",
+        "line": 31,
+        "scope": "handle",
+        "description": "Unescaped SQL query string is passed directly to db.query(sql)."
+      }
+    ],
+    "evidence": [
+      {
+        "file": "app.js",
+        "line": 30,
+        "description": "const sql = 'SELECT * FROM products WHERE id = ' + q.id concatenates raw user input into SQL syntax."
+      }
+    ],
+    "blockers": [
+      "The required OS-enforced execution sandbox controls (empty allowlisted environment, read-only target toolchain, and low resource limits) cannot be enforced to run target code safely."
+    ],
+    "validation_plan": {
+      "local": "In an isolated OS sandbox, invoke the handler with an id query parameter containing a safe SQL fragment (e.g. 1 UNION SELECT 2) and verify the resulting sql string recorded in db.queries."
+    }
+  },
+  {
+    "verdict": "rejected",
+    "fingerprint": "app-search-safe-parameterized-query",
+    "title": "Hypothesized SQL injection in /search-safe endpoint",
+    "description": "Investigation into whether untrusted input in the term query parameter of /search-safe allows SQL injection.",
+    "claimed_root_cause": "Hypothesized that user input q.term is concatenated or evaluated unsafely into the database query.",
+    "trace": [
+      {
+        "kind": "entrypoint",
+        "file": "app.js",
+        "line": 36,
+        "scope": "handle",
+        "description": "HTTP request enters the /search-safe route branch."
+      },
+      {
+        "kind": "sink",
+        "file": "app.js",
+        "line": 38,
+        "scope": "handle",
+        "description": "Query is submitted to db.query() with parameterized placeholder."
+      }
+    ],
+    "evidence": [
+      {
+        "file": "app.js",
+        "line": 38,
+        "description": "db.query is called with a parameterized query string and a parameter array: db.query('SELECT * FROM products WHERE name LIKE ?', [q.term])."
+      }
+    ],
+    "reason": "Source code review conclusively refutes SQL injection on this endpoint. The handler utilizes parameterized query placeholders ('?') and supplies q.term as an element of the params argument array ([q.term]). The database interface handles parameter binding separately from query text parsing, preventing SQL syntax manipulation."
+  },
+  {
+    "verdict": "needs_validation",
+    "fingerprint": "app-source-hardcoded-secrets",
+    "title": "Hardcoded API key and JWT secret in application source code",
+    "description": "Hardcoded credential strings API_KEY and JWT_SECRET are defined directly in source code and exported from the root module.",
+    "claimed_root_cause": "Sensitive authentication and cryptographic signing secrets are embedded as plaintext string literals in source code rather than retrieved from secure environment variables or a key vault.",
+    "trace": [
+      {
+        "kind": "entrypoint",
+        "file": "app.js",
+        "line": 7,
+        "scope": "global",
+        "description": "API_KEY string literal defined at top level in source code."
+      },
+      {
+        "kind": "sink",
+        "file": "app.js",
+        "line": 71,
+        "scope": "global",
+        "description": "API_KEY and JWT_SECRET are exported via module.exports."
+      }
+    ],
+    "evidence": [
+      {
+        "file": "app.js",
+        "line": 7,
+        "description": "API_KEY contains the literal value 'sk-live-9f27c1ab44e04d2fBUTTHISISATESTKEY0001'."
+      },
+      {
+        "file": "app.js",
+        "line": 8,
+        "description": "JWT_SECRET contains the literal value 'super-secret-jwt-key-12345'."
+      }
+    ],
+    "blockers": [
+      "Source code inspection alone cannot confirm whether these secret strings are valid active production secrets or dummy test values, as checking active secret status against external providers violates execution and network boundaries."
+    ],
+    "validation_plan": {
+      "local": "Inspect deployment configurations, build pipelines, and environment variables locally to determine if runtime configuration overrides these hardcoded fallback values.",
+      "deployment": "Have the secret owner verify whether sk-live-9f27c1ab44e04d2fBUTTHISISATESTKEY0001 or super-secret-jwt-key-12345 match active production credentials in payment provider or authentication systems, and revoke them if live."
+    }
+  }
+]

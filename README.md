@@ -11,3 +11,4 @@ This repository archives everything actually tested by The Lab Report, companion
 | # | Mục đã test | Repo gốc | Kết quả tóm tắt | Thư mục |
 |---|---|---|---|---|
 | 01 | Impeccable (bộ quét "AI slop") | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | 62 luật quét đúng như công bố; trang mẫu bị bắt 19 lỗi trong ~1 giây; trang đã sửa đạt 0 lỗi | [impeccable/](impeccable/) |
+| 02 | security-audit-skill (skill audit bảo mật) | [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) | Bắt đủ 5/5 lỗ hổng cài sẵn, 0 báo nhầm; cả 5 dừng ở mức cần kiểm chứng thêm (0 confirmed) vì verdict xác nhận cần sandbox đạt chuẩn | [security-audit-skill/](security-audit-skill/) |

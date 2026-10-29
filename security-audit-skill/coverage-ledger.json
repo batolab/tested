@@ -1,0 +1,336 @@
+[
+  {
+    "canonical_refs": {
+      "surface": "app.js#GET /admin/users",
+      "boundary": "app.js#handle",
+      "subsystem": "profile/quick/all-in-scope-subsystems",
+      "attack_class": "ATTACK-CLASSES.md#Access control"
+    },
+    "surface": "GET /admin/users endpoint",
+    "boundary": "Administrative authorization",
+    "subsystem": "All in-scope subsystems",
+    "attack_class": "Access control",
+    "starting_paths": [
+      "app.js"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Access control",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline"
+    ],
+    "excluded_blocks": [
+      {
+        "block": "MEMORY-SAFETY-AND-BINARY.md#Memory safety",
+        "reason": "Target is written in pure JavaScript on Node.js without native FFI or C++ addons."
+      },
+      {
+        "block": "AI-AND-LLM.md#Model context and prompt assembly",
+        "reason": "Target contains no LLM, RAG, or AI agent integrations."
+      }
+    ],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "candidate",
+    "agent_id": "hunter-quick",
+    "reviewed_paths": [
+      "app.js"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "hunter-quick",
+        "reviewed_paths": [
+          "app.js"
+        ],
+        "invariant": "Administrative endpoints must require authenticated principal and authorization check before returning user records.",
+        "method": "source",
+        "result": "Source inspection at app.js line 57-61 reveals parsed.pathname === /admin/users returns JSON.stringify(users) directly without any authentication or authorization checks.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [
+      "app-admin-missing-auth"
+    ],
+    "unresolved": [
+      "Target execution sandbox controls unavailable; candidate retained at needs_validation"
+    ],
+    "coverage_id": "app.js%23GET%20%2Fadmin%2Fusers::app.js%23handle::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Access%20control"
+  },
+  {
+    "canonical_refs": {
+      "surface": "app.js#GET /calc",
+      "boundary": "app.js#eval",
+      "subsystem": "profile/quick/all-in-scope-subsystems",
+      "attack_class": "ATTACK-CLASSES.md#Injection"
+    },
+    "surface": "GET /calc endpoint",
+    "boundary": "JavaScript runtime eval",
+    "subsystem": "All in-scope subsystems",
+    "attack_class": "Injection",
+    "starting_paths": [
+      "app.js"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline"
+    ],
+    "excluded_blocks": [
+      {
+        "block": "MEMORY-SAFETY-AND-BINARY.md#Memory safety",
+        "reason": "Target is written in pure JavaScript on Node.js without native FFI or C++ addons."
+      },
+      {
+        "block": "AI-AND-LLM.md#Model context and prompt assembly",
+        "reason": "Target contains no LLM, RAG, or AI agent integrations."
+      }
+    ],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "candidate",
+    "agent_id": "hunter-quick",
+    "reviewed_paths": [
+      "app.js"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "hunter-quick",
+        "reviewed_paths": [
+          "app.js"
+        ],
+        "invariant": "User input must not be evaluated as code in the JavaScript execution context.",
+        "method": "source",
+        "result": "Source review at app.js line 52 demonstrates that eval(q.expr) executes unparsed user-supplied expression directly.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [
+      "app-calc-code-injection"
+    ],
+    "unresolved": [
+      "Target execution sandbox controls unavailable; candidate retained at needs_validation"
+    ],
+    "coverage_id": "app.js%23GET%20%2Fcalc::app.js%23eval::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Injection"
+  },
+  {
+    "canonical_refs": {
+      "surface": "app.js#GET /hello",
+      "boundary": "app.js#res.end",
+      "subsystem": "profile/quick/all-in-scope-subsystems",
+      "attack_class": "ATTACK-CLASSES.md#Injection"
+    },
+    "surface": "GET /hello endpoint",
+    "boundary": "HTTP HTML response rendering",
+    "subsystem": "All in-scope subsystems",
+    "attack_class": "Injection",
+    "starting_paths": [
+      "app.js"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline"
+    ],
+    "excluded_blocks": [
+      {
+        "block": "MEMORY-SAFETY-AND-BINARY.md#Memory safety",
+        "reason": "Target is written in pure JavaScript on Node.js without native FFI or C++ addons."
+      },
+      {
+        "block": "AI-AND-LLM.md#Model context and prompt assembly",
+        "reason": "Target contains no LLM, RAG, or AI agent integrations."
+      }
+    ],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "candidate",
+    "agent_id": "hunter-quick",
+    "reviewed_paths": [
+      "app.js"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "hunter-quick",
+        "reviewed_paths": [
+          "app.js"
+        ],
+        "invariant": "User input reflected in HTML documents must be HTML-entity encoded to prevent script injection.",
+        "method": "source",
+        "result": "Source inspection at app.js line 45-46 reveals Content-Type text/html with raw interpolation of q.name into <h1> tags.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [
+      "app-hello-reflected-xss"
+    ],
+    "unresolved": [
+      "Target execution sandbox controls unavailable; candidate retained at needs_validation"
+    ],
+    "coverage_id": "app.js%23GET%20%2Fhello::app.js%23res.end::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Injection"
+  },
+  {
+    "canonical_refs": {
+      "surface": "app.js#GET /product",
+      "boundary": "app.js#db.query",
+      "subsystem": "profile/quick/all-in-scope-subsystems",
+      "attack_class": "ATTACK-CLASSES.md#Injection"
+    },
+    "surface": "GET /product endpoint",
+    "boundary": "Database SQL query construction",
+    "subsystem": "All in-scope subsystems",
+    "attack_class": "Injection",
+    "starting_paths": [
+      "app.js"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline"
+    ],
+    "excluded_blocks": [
+      {
+        "block": "MEMORY-SAFETY-AND-BINARY.md#Memory safety",
+        "reason": "Target is written in pure JavaScript on Node.js without native FFI or C++ addons."
+      },
+      {
+        "block": "AI-AND-LLM.md#Model context and prompt assembly",
+        "reason": "Target contains no LLM, RAG, or AI agent integrations."
+      }
+    ],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "candidate",
+    "agent_id": "hunter-quick",
+    "reviewed_paths": [
+      "app.js"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "hunter-quick",
+        "reviewed_paths": [
+          "app.js"
+        ],
+        "invariant": "Database queries must use parameterized query interfaces to prevent SQL injection.",
+        "method": "source",
+        "result": "Source inspection at app.js line 30 reveals string concatenation of q.id into SELECT query without parameterization.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [
+      "app-product-sql-injection"
+    ],
+    "unresolved": [
+      "Target execution sandbox controls unavailable; candidate retained at needs_validation"
+    ],
+    "coverage_id": "app.js%23GET%20%2Fproduct::app.js%23db.query::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Injection"
+  },
+  {
+    "canonical_refs": {
+      "surface": "app.js#GET /search-safe",
+      "boundary": "app.js#db.query",
+      "subsystem": "profile/quick/all-in-scope-subsystems",
+      "attack_class": "ATTACK-CLASSES.md#Injection"
+    },
+    "surface": "GET /search-safe endpoint",
+    "boundary": "Database SQL parameterized query",
+    "subsystem": "All in-scope subsystems",
+    "attack_class": "Injection",
+    "starting_paths": [
+      "app.js"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline"
+    ],
+    "excluded_blocks": [
+      {
+        "block": "MEMORY-SAFETY-AND-BINARY.md#Memory safety",
+        "reason": "Target is written in pure JavaScript on Node.js without native FFI or C++ addons."
+      },
+      {
+        "block": "AI-AND-LLM.md#Model context and prompt assembly",
+        "reason": "Target contains no LLM, RAG, or AI agent integrations."
+      }
+    ],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "candidate",
+    "agent_id": "hunter-quick",
+    "reviewed_paths": [
+      "app.js"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "hunter-quick",
+        "reviewed_paths": [
+          "app.js"
+        ],
+        "invariant": "Database queries must bind user input via placeholders rather than string concatenation.",
+        "method": "source",
+        "result": "Source inspection at app.js line 38 confirms query uses ? placeholder and [q.term] parameter array, safely binding parameter.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [
+      "app-search-safe-parameterized-query"
+    ],
+    "unresolved": [],
+    "coverage_id": "app.js%23GET%20%2Fsearch-safe::app.js%23db.query::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Injection"
+  },
+  {
+    "canonical_refs": {
+      "surface": "app.js#secrets",
+      "boundary": "app.js#module.exports",
+      "subsystem": "profile/quick/all-in-scope-subsystems",
+      "attack_class": "ATTACK-CLASSES.md#Cryptography and secrets"
+    },
+    "surface": "Source secrets export",
+    "boundary": "Secret storage and lifecycle",
+    "subsystem": "All in-scope subsystems",
+    "attack_class": "Cryptography and secrets",
+    "starting_paths": [
+      "app.js"
+    ],
+    "ordinary_attack_class_block": "ATTACK-CLASSES.md#Cryptography and secrets",
+    "selected_companion_blocks": [
+      "WEB-PROTOCOL-AND-AUTH.md#Core discipline"
+    ],
+    "excluded_blocks": [
+      {
+        "block": "MEMORY-SAFETY-AND-BINARY.md#Memory safety",
+        "reason": "Target is written in pure JavaScript on Node.js without native FFI or C++ addons."
+      },
+      {
+        "block": "AI-AND-LLM.md#Model context and prompt assembly",
+        "reason": "Target contains no LLM, RAG, or AI agent integrations."
+      }
+    ],
+    "prior_status": "none",
+    "attempts": [],
+    "wave": 1,
+    "status": "candidate",
+    "agent_id": "hunter-quick",
+    "reviewed_paths": [
+      "app.js"
+    ],
+    "local_checks": [
+      {
+        "agent_id": "hunter-quick",
+        "reviewed_paths": [
+          "app.js"
+        ],
+        "invariant": "API keys and cryptographic signing secrets must not be hardcoded in repository source.",
+        "method": "source",
+        "result": "Source inspection at app.js line 7-8 and 71 reveals API_KEY and JWT_SECRET defined as string literals and exported.",
+        "artifact": null
+      }
+    ],
+    "result_fingerprints": [
+      "app-source-hardcoded-secrets"
+    ],
+    "unresolved": [
+      "Target execution sandbox controls unavailable; candidate retained at needs_validation"
+    ],
+    "coverage_id": "app.js%23secrets::app.js%23module.exports::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Cryptography%20and%20secrets"
+  }
+]

@@ -1,0 +1,19 @@
+Validator test suites shipped with the skill (run before the audit):
+
+$ node validate-findings.test.cjs
+ℹ tests 34
+ℹ pass 34
+ℹ fail 0
+
+$ node validate-coverage-ledger.test.cjs
+ℹ tests 31
+ℹ pass 31
+ℹ fail 0
+
+Validators run on this audit's real output files:
+
+$ node validate-findings.cjs findings.json
+PASS: 6 findings valid
+
+$ node validate-coverage-ledger.cjs coverage-ledger.json
+PASS: 6 coverage units valid
