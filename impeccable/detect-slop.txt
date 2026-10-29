@@ -1,0 +1,42 @@
+
+/home/hatch/workspace/goals/k-nh-review-github-repo-demo-th-t-phase-1-k-o-kh-n-gi/hidden_files/video-01-impeccable/test/slop.html
+  [gray-on-color] text #9ca3af on bg gradient(#7c3aed, #2563eb)
+    → Gray text looks washed out on colored backgrounds. Use a darker shade of the background color instead, or white/near-white for contrast.
+  [low-contrast] 2.0:1 (need 4.5:1) — text #9ca3af on #2563eb (gradient on body)
+    → Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.
+  [low-contrast] 3.7:1 (need 4.5:1) — text #6b7280 on #111827
+    → Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.
+  [low-contrast] 3.7:1 (need 4.5:1) — text #6b7280 on #111827
+    → Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.
+  [low-contrast] 2.7:1 (need 4.5:1) — text #f3f4f6 on #6b95f1 (gradient on body)
+    → Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.
+  [gray-on-color] text #9ca3af on bg gradient(#a679f3, #6b95f1)
+    → Gray text looks washed out on colored backgrounds. Use a darker shade of the background color instead, or white/near-white for contrast.
+  [low-contrast] 1.1:1 (need 4.5:1) — text #9ca3af on #6b95f1 (gradient on body)
+    → Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.
+  [low-contrast] 2.7:1 (need 4.5:1) — text #f3f4f6 on #6b95f1 (gradient on body)
+    → Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.
+  [gray-on-color] text #9ca3af on bg gradient(#a679f3, #6b95f1)
+    → Gray text looks washed out on colored backgrounds. Use a darker shade of the background color instead, or white/near-white for contrast.
+  [low-contrast] 1.1:1 (need 4.5:1) — text #9ca3af on #6b95f1 (gradient on body)
+    → Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.
+  [low-contrast] 2.7:1 (need 4.5:1) — text #f3f4f6 on #6b95f1 (gradient on body)
+    → Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.
+  [gray-on-color] text #9ca3af on bg gradient(#a679f3, #6b95f1)
+    → Gray text looks washed out on colored backgrounds. Use a darker shade of the background color instead, or white/near-white for contrast.
+  [low-contrast] 1.1:1 (need 4.5:1) — text #9ca3af on #6b95f1 (gradient on body)
+    → Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.
+  [tiny-text] 11px body text
+    → Body text below 12px is hard to read, especially on high-DPI screens. Use at least 14px for body content, 16px is ideal.
+  [tiny-text] 11px body text
+    → Body text below 12px is hard to read, especially on high-DPI screens. Use at least 14px for body content, 16px is ideal.
+  [tiny-text] 11px body text
+    → Body text below 12px is hard to read, especially on high-DPI screens. Use at least 14px for body content, 16px is ideal.
+  [overused-font] Primary font: inter
+    → Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.
+  [skipped-heading] <h1> "Giải pháp AI toàn diện cho mọi doanh nghiệp" followed by <h3> "Tính năng mạnh mẽ" (missing h2)
+    → Heading levels should not skip (e.g. h1 then h3 with no h2). Screen readers use heading hierarchy for navigation. Skipping levels breaks the document outline.
+  [ai-color-palette] Purple/violet accent colors detected
+    → Purple/violet gradients and cyan-on-dark are the most recognizable tells of AI-generated UIs. A gradient in one of those hues is the tell on its own; flat neon ink on a dark ground is charged once a second tell hue joins it. Choose a distinctive, intentional palette.
+
+19 anti-patterns found.
