@@ -1,5 +1,5 @@
 
-/home/hatch/workspace/goals/k-nh-review-github-repo-demo-th-t-phase-1-k-o-kh-n-gi/hidden_files/video-01-impeccable/test/slop.html
+slop.html
   [gray-on-color] text #9ca3af on bg gradient(#7c3aed, #2563eb)
     → Gray text looks washed out on colored backgrounds. Use a darker shade of the background color instead, or white/near-white for contrast.
   [low-contrast] 2.0:1 (need 4.5:1) — text #9ca3af on #2563eb (gradient on body)
