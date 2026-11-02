@@ -1,0 +1,41 @@
+$ node tools/check.mjs   (no arguments: full library)
+warn  arcane/portal
+      slow: 4.2 ms a frame
+warn  explosions/big-explosion
+      slow: 5.7 ms a frame
+warn  explosions/nuke
+      slow: 6.6 ms a frame
+warn  fire/fire-breath
+      slow: 5.0 ms a frame
+warn  ice/frost-breath
+      slow: 6.7 ms a frame
+warn  lightning/storm-cloud
+      slow: 6.0 ms a frame
+warn  scifi/laser-grid
+      slow: 4.8 ms a frame
+warn  transitions/burn-away
+      slow: 4.4 ms a frame
+warn  transitions/diamond-wipe
+      slow: 7.6 ms a frame
+warn  transitions/pixel-dissolve
+      slow: 8.8 ms a frame
+warn  weather/clouds
+      slow: 5.9 ms a frame
+warn  weather/falling-leaves
+      slow: 9.1 ms a frame
+warn  weather/fireflies
+      slow: 6.2 ms a frame
+warn  weather/fog
+      slow: 4.2 ms a frame
+warn  weather/god-rays
+      slow: 9.6 ms a frame
+warn  weather/rain
+      slow: 4.5 ms a frame
+warn  weather/shooting-stars
+      slow: 5.7 ms a frame
+warn  weather/snow
+      slow: 5.8 ms a frame
+warn  weather/storm
+      slow: 7.2 ms a frame
+
+244 effects: 244 pass, 0 fail, 19 with warnings

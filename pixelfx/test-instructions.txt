@@ -1,0 +1,53 @@
+Test instructions used for the pixelfx test (patch-gg/pixelfx, version 0.3.0).
+
+1. Effect count verification — count the library three independent ways and
+   compare against the README claim of 244:
+   a. Call the tool's own registry (allIds() in tools/lib/fxlib.mjs).
+   b. Count effect files under src/fx/<category>/, excluding the shared
+      _lib.js helper files.
+   c. Count effect rows in docs/CATALOG.md.
+   Record all three numbers and any mismatch with the README and with the
+   GitHub repository description.
+
+2. Install — clone the repository and run with the system Node.js (no build
+   step). Separately, install into a scratch project with
+   `npm i github:patch-gg/pixelfx` as the README instructs and record the
+   result.
+
+3. Rendering — use the repository's own tool to render animated GIFs of a
+   sample of effects across categories:
+     node tools/render.mjs fire/campfire ice/frost-nova \
+       explosions/big-explosion lightning/plasma-ball shadow/black-hole \
+       weather/fireflies critters/butterfly ui/confetti holy/heal \
+       moves/sword-combo fire/torch --gif
+   Record frame counts, failures and total wall time.
+
+4. Sprite sheet export:
+     node tools/render.mjs ice/frost-nova --sheet
+   Check the transparent PNG and the Aseprite-style JSON (frame rects,
+   meta.pixelfx: fps, loop, pivot).
+
+5. Palette swap — re-render one effect with a different palette option and
+   confirm the look changes without code edits:
+     node tools/render.mjs fire/torch --gif \
+       --opts '{"palette": ["#102","#215","#43a","#8cf","#cff","#fff"]}'
+
+6. The repository's own checker, first on the rendered sample, then on the
+   full library:
+     node tools/check.mjs fire/campfire ice/frost-nova \
+       explosions/big-explosion lightning/plasma-ball shadow/black-hole \
+       weather/fireflies critters/butterfly ui/confetti holy/heal \
+       moves/sword-combo fire/torch
+     node tools/check.mjs
+   Record pass/fail/warning counts verbatim.
+
+7. Programmatic API — run sample-api-test.mjs (included): it follows the
+   README usage (createFrame / createFx / composite) to draw ice/frost-nova
+   over a small sample scene and writes composited PNG frames.
+
+8. Acting — render one move acted out with its target:
+     node tools/act.mjs moves/sword-combo --mp4
+
+Anything that needs an external account (the bundled Claude Code skill,
+the hosted gallery) is out of scope for this test and must be reported as
+not tested.
