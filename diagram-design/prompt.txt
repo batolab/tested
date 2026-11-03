@@ -1,0 +1,1 @@
+Make me an architecture diagram of my app: frontend, backend, database, Redis cache.

@@ -1,0 +1,65 @@
+Test instructions used for the diagram-design test (cathrynlavery/diagram-design, plugin version 2.6.136).
+
+1. Diagram-type count verification — count the library three independent
+   ways and compare against the claimed 45 types. Work inside
+   skills/diagram-design/ of the cloned repository:
+   a. Count the rows of the "Visual-type guide" table in SKILL.md:
+        awk '/^### Visual-type guide/,/^Rules of thumb/' SKILL.md | grep -c 'references/type-'
+   b. Count the unique type reference links in the same table.
+   c. Count the guide files on disk:
+        ls references/type-*.md | wc -l
+   Record all three numbers and whether they agree with each other and
+   with the claim.
+
+2. Install — install the skill with the command from the README:
+     npx skills add cathrynlavery/diagram-design
+   Note that by default this command is interactive and asks which agents
+   to install into. For a non-interactive run use:
+     npx skills add cathrynlavery/diagram-design --agent '*' -y
+   Record where the skill lands and any security assessment the installer
+   prints.
+
+3. Baseline (no skill) — write the Mermaid source in baseline.mmd
+   (included): exactly the four components and three relationships named
+   in the prompt, nothing added. Render it with Mermaid 10 using default
+   settings only (default theme, no configuration) and save the PNG.
+
+4. With skill — give an agent the prompt in prompt.txt (included)
+   verbatim, unchanged. Follow SKILL.md: at the first-time style-guide
+   gate choose option (e) keep the default skin; the guide routes this
+   prompt to the Architecture type; use the doc-inline size preset.
+   Save the result as one single HTML file.
+
+5. The repository's own checker — from the skill directory run:
+     python3 scripts/self_check.py diagram-with-skill.html
+   Record the output verbatim, including the exit code.
+
+6. Self-contained audit — list every external reference in the HTML file:
+     grep -oE '(src|href)="[^"]*"|url\([^)]*\)|@import[^;]*' diagram-with-skill.html | sort -u
+   Record the file size in bytes and the line count. Then open the file
+   directly from disk (a file:// address, no web server) and screenshot
+   the rendered page.
+
+7. PNG export — export the diagram with the packaged helper (this needs
+   Playwright and a headless Chromium):
+     python3 scripts/export_png.py diagram-with-skill.html diagram-with-skill.png
+   Inspect the PNG visually: every arrow label fully readable, no label
+   covered by a box, no text overflowing its box.
+
+8. Brand re-skin — repeat step 4 for the same diagram, but first change
+   the skin through the style guide's own customization mechanism,
+   starting from the dark template tokens: paper #0B0E14, link #58A6FF,
+   and accent #F0B43C used only on the single focal node. Save as a
+   second HTML file, then repeat steps 5 and 7 on it (self-check, PNG
+   export, visual inspection).
+
+9. Vertical variant — redraw the same diagram with the primary flow
+   running top to bottom instead of left to right (the Architecture
+   guide allows either direction; hold one): frontend on top, backend
+   in the middle, the two stores side by side in a row at the bottom,
+   same skin decision as step 4. Then repeat steps 5 and 7 on it, and
+   apply step 8's token change to the vertical file for the branded
+   vertical variant.
+
+Anything that needs an external account is out of scope for this test
+and must be reported as not tested.

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Serif:ital@0;1&family=Noto+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@400&family=Noto+Sans+TC:wght@400;500;600&family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #0B0E14;   /* white-smoke */
+      --color-ink:     #E8EEF4;   /* jet-black */
+      --color-muted:   #93A1B3;   /* blue-slate */
+      --color-accent:  #F0B43C;   /* burnt-tangerine */
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Instrument Serif', 'Noto Serif', 'Noto Serif KR', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+
+    svg { width: 100%; min-width: 760px; display: block; }
+    @media print {
+      .diagram-container { overflow-x: visible; }
+      svg { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Architecture · Diagram Design</p>
+    <h1>App architecture</h1>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 760 960" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="app-architecture-v-dark-title app-architecture-v-dark-desc">
+        <title id="app-architecture-v-dark-title">App architecture: frontend, backend, database, Redis</title>
+        <desc id="app-architecture-v-dark-desc">Architecture diagram of a small web app, laid out top to bottom: a frontend client calls one backend over HTTPS, and the backend reads and writes a primary database and checks a Redis cache.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#93A1B3"/></marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#F0B43C"/></marker>
+          <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#58A6FF"/></marker>
+        </defs>
+
+        <rect width="100%" height="100%" fill="#0B0E14"/>
+
+        <!-- Connectors first (z-order: lines behind nodes) -->
+        <!-- Frontend -> Backend (external call, link blue, vertical) -->
+        <line x1="380" y1="172" x2="380" y2="364" stroke="#58A6FF" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+        <rect x="388" y="262" width="52" height="16" rx="2" fill="#0B0E14"/>
+        <text x="414" y="274" fill="#7C8B9C" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">HTTPS</text>
+
+        <!-- Backend -> Database (leave bottom edge port 1, one bend, enter top edge) -->
+        <path d="M 328,444 V 558 Q 328,566 320,566 H 208 Q 200,566 200,574 V 688" fill="none" stroke="#93A1B3" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <rect x="248" y="542" width="36" height="16" rx="2" fill="#0B0E14"/>
+        <text x="266" y="554" fill="#7C8B9C" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">SQL</text>
+
+        <!-- Backend -> Redis cache (leave bottom edge port 2, one bend, enter top edge) -->
+        <path d="M 432,444 V 578 Q 432,586 440,586 H 552 Q 560,586 560,594 V 688" fill="none" stroke="#93A1B3" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <rect x="466" y="562" width="56" height="16" rx="2" fill="#0B0E14"/>
+        <text x="494" y="574" fill="#7C8B9C" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">GET/SET</text>
+
+        <!-- Node: Frontend (input) -->
+        <rect x="220" y="96" width="320" height="76" rx="6" fill="#0B0E14"/>
+        <rect x="220" y="96" width="320" height="76" rx="6" fill="rgba(147,161,179,0.10)" stroke="#7C8B9C" stroke-width="1"/>
+        <rect x="228" y="102" width="28" height="12" rx="2" fill="transparent" stroke="rgba(124,139,156,0.40)" stroke-width="0.8"/>
+        <text x="242" y="111" fill="rgba(124,139,156,0.85)" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.08em">WEB</text>
+        <text x="380" y="140" fill="#E8EEF4" font-size="16" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Frontend</text>
+        <text x="380" y="158" fill="#93A1B3" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">browser client</text>
+
+        <!-- Node: Backend (focal) -->
+        <rect x="220" y="368" width="320" height="76" rx="6" fill="#0B0E14"/>
+        <rect x="220" y="368" width="320" height="76" rx="6" fill="rgba(240,180,60,0.10)" stroke="#F0B43C" stroke-width="1"/>
+        <rect x="228" y="374" width="28" height="12" rx="2" fill="transparent" stroke="rgba(240,180,60,0.40)" stroke-width="0.8"/>
+        <text x="242" y="383" fill="rgba(240,180,60,0.85)" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.08em">API</text>
+        <text x="380" y="412" fill="#E8EEF4" font-size="16" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Backend</text>
+        <text x="380" y="430" fill="#93A1B3" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">app server</text>
+
+        <!-- Node: Database (store) -->
+        <rect x="40" y="688" width="320" height="76" rx="6" fill="#0B0E14"/>
+        <rect x="40" y="688" width="320" height="76" rx="6" fill="rgba(232,238,244,0.05)" stroke="#93A1B3" stroke-width="1"/>
+        <rect x="48" y="694" width="28" height="12" rx="2" fill="transparent" stroke="rgba(147,161,179,0.40)" stroke-width="0.8"/>
+        <text x="62" y="703" fill="rgba(147,161,179,0.85)" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
+        <text x="200" y="732" fill="#E8EEF4" font-size="16" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Database</text>
+        <text x="200" y="750" fill="#93A1B3" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">primary store</text>
+
+        <!-- Node: Redis cache (store) -->
+        <rect x="400" y="688" width="320" height="76" rx="6" fill="#0B0E14"/>
+        <rect x="400" y="688" width="320" height="76" rx="6" fill="rgba(232,238,244,0.05)" stroke="#93A1B3" stroke-width="1"/>
+        <rect x="408" y="694" width="36" height="12" rx="2" fill="transparent" stroke="rgba(147,161,179,0.40)" stroke-width="0.8"/>
+        <text x="426" y="703" fill="rgba(147,161,179,0.85)" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.08em">CACHE</text>
+        <text x="560" y="732" fill="#E8EEF4" font-size="16" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Redis cache</text>
+        <text x="560" y="750" fill="#93A1B3" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">in-memory cache</text>
+
+        <!-- Legend strip -->
+        <line x1="30" y1="888" x2="730" y2="888" stroke="rgba(232,238,244,0.10)" stroke-width="0.8"/>
+        <text x="30" y="904" fill="#93A1B3" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.14em">LEGEND</text>
+        <rect x="120" y="896" width="16" height="12" rx="2" fill="rgba(147,161,179,0.10)" stroke="#7C8B9C" stroke-width="0.8"/>
+        <text x="144" y="905" fill="#7C8B9C" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.06em">CLIENT</text>
+        <rect x="232" y="896" width="16" height="12" rx="2" fill="rgba(240,180,60,0.10)" stroke="#F0B43C" stroke-width="0.8"/>
+        <text x="256" y="905" fill="#7C8B9C" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.06em">APP TIER · FOCAL</text>
+        <rect x="420" y="896" width="16" height="12" rx="2" fill="rgba(232,238,244,0.05)" stroke="#93A1B3" stroke-width="0.8"/>
+        <text x="444" y="905" fill="#7C8B9C" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.06em">DATA STORE</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+$ python3 scripts/self_check.py diagram-with-skill.html
+OK diagram-with-skill.html
+exit code: 0
+$ python3 scripts/self_check.py diagram-lab-branded.html
+OK diagram-lab-branded.html
+exit code: 0
+$ python3 scripts/self_check.py diagram-with-skill-vertical.html
+OK diagram-with-skill-vertical.html
+exit code: 0
+$ python3 scripts/self_check.py diagram-lab-branded-vertical.html
+OK diagram-lab-branded-vertical.html
+exit code: 0
